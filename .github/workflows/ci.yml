@@ -41,8 +41,13 @@ jobs:
         run: |
           cd MLProject
 
-          RUN_ID=$(ls mlruns/0/ | grep -v meta.yaml | head -n 1)
+          MODEL_PATH=$(find $PWD/mlruns -type d -name "model" | head -n 1)
 
-          mlflow models build-docker -m "mlruns/0/$RUN_ID/artifacts/model" -n ${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest
+          echo "========================================="
+          echo "Lokasi model ditemukan di: $MODEL_PATH"
+          echo "Username Docker Hub: ${{ secrets.DOCKER_USERNAME }}"
+          echo "========================================="
 
-          docker push ${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest
+          mlflow models build-docker -m "$MODEL_PATH" -n "${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest"
+
+          docker push "${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest"
