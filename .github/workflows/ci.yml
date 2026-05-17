@@ -43,11 +43,6 @@ jobs:
 
           MODEL_PATH=$(find $PWD/mlruns -type d -name "model" | head -n 1)
 
-          echo "========================================="
-          echo "Lokasi model ditemukan di: $MODEL_PATH"
-          echo "Username Docker Hub: ${{ secrets.DOCKER_USERNAME }}"
-          echo "========================================="
-
-          mlflow models build-docker -m "$MODEL_PATH" -n "${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest"
+          mlflow models build-docker -m "$MODEL_PATH" -n "${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest" --env-manager=local
 
           docker push "${{ secrets.DOCKER_USERNAME }}/titanic-sml-model:latest"
